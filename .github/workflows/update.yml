@@ -1,0 +1,50 @@
+name: Update Antigravity CLI
+
+on:
+  schedule:
+    # Runs at 00:00 UTC every day
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allows manual triggering from the Actions tab
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    # Explicitly limit permissions to only writing content changes back to the repo.
+    # This follows the principle of least privilege.
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch full history is not needed, but we need to be able to push
+          persist-credentials: true
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v27
+        with:
+          # Standard Nix configuration for GitHub Actions
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update Antigravity CLI metadata
+        # This will run the update script, prefetch hashes and update meta.json
+        run: nix run .#update
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "xsen"
+          git config user.email "evgeny.leshchenko@gmail.com"
+          
+          # Check if meta.json has changed
+          if [[ -n "$(git status --porcelain meta.json)" ]]; then
+            VERSION=$(jq -r .version meta.json)
+            BUILD_ID=$(jq -r .build_id meta.json)
+            
+            git add meta.json
+            git commit -m "chore(deps): bump antigravity-cli to $VERSION (build $BUILD_ID)"
+            git push
+            echo "Changes pushed to the repository."
+          else
+            echo "No changes detected. Skipping commit."
+          fi
