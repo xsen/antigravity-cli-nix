@@ -1,0 +1,10 @@
+{
+  "version": "1.0.3",
+  "build_id": "6459114696605696",
+  "hashes": {
+    "x86_64-linux": "sha256-UM/b3TuXROHHx0dKMU0KtENNREmY+VAYKmxRWewu/ic=",
+    "aarch64-linux": "sha256-Cp44KTj1wP85y6Z6oCOd1ylL2nTg1mDx7aJuv/Q7nBE=",
+    "aarch64-darwin": "sha256-lbf6dCJ7QhDNomfpi10Dhk9VShxAxTC0zsFIFpGlbtA=",
+    "x86_64-darwin": "sha256-B1zPkt4h3JN7ZWhin0iTQMCe+NhVvBGKWCLfKnBrZnw="
+  }
+}
