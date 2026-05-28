@@ -16,17 +16,15 @@ A Nix flake for [Antigravity CLI](https://antigravity.google) (Google's Go-based
 ```nix
 {
   inputs = {
-    antigravity.url = "github:xsen/antigravity-cli-nix";
-    # OR for local testing:
-    # antigravity.url = "git+file:///path/to/your/repo";
+    antigravity-cli.url = "github:xsen/antigravity-cli-nix";
   };
 
-  outputs = { self, nixpkgs, antigravity, ... }: {
+  outputs = { self, nixpkgs, antigravity-cli, ... }: {
     nixosConfigurations.your-hostname = nixpkgs.lib.nixosSystem {
       modules = [
         ({ pkgs, ... }: {
           environment.systemPackages = [
-            antigravity.packages.${pkgs.system}.default
+            antigravity-cli.packages.${pkgs.stdenv.hostPlatform.system}.default
           ];
         })
       ];
@@ -54,7 +52,7 @@ nix run .#update
 This script:
 1. Queries the Google Storage JSON API for the latest version and build ID.
 2. Prefetches the archives for all supported platforms.
-3. Calculates SRI hashes (handling the single-file archive quirk in Nix).
+3. Calculates SRI hashes matching Nix's `fetchzip` behavior.
 4. Updates `meta.json`.
 
 ## License
