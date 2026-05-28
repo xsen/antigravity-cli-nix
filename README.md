@@ -1,17 +1,25 @@
 # Antigravity CLI Nix Flake
 
-A Nix flake for [Antigravity CLI](https://antigravity.google) (Google's Go-based TUI agent client) with an automated updater. This flake allows you to stay on the bleeding edge without waiting for updates in `nixpkgs`.
+[![Update Antigravity CLI](https://github.com/xsen/antigravity-cli-nix/actions/workflows/update.yml/badge.svg)](https://github.com/xsen/antigravity-cli-nix/actions/workflows/update.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![NixOS](https://img.shields.io/badge/NixOS-Standard-blue.svg)](https://nixos.org)
 
-## Features
+A modern, auto-updating Nix flake for [Antigravity CLI](https://antigravity.google) — Google's Go-based terminal user interface (TUI) agent client.
 
-- **Automated Updates**: Stay updated with `nix run .#update`.
-- **NixOS Compatible**: Uses `autoPatchelfHook` for seamless execution on NixOS.
-- **Multi-Platform**: Supports `x86_64-linux`, `aarch64-linux`, `x86_64-darwin`, and `aarch64-darwin`.
-- **SRI Hashes**: Uses modern SRI hashes for integrity verification.
+## 🚀 Why this Flake?
 
-## Installation
+- **⚡ Bleeding Edge**: Automatically checks for updates from Google Cloud Storage every 24 hours.
+- **✅ Verified Hashes**: Securely prefetches and calculates SRI hashes for all platforms.
+- **🐧 NixOS Ready**: Pre-configured with `autoPatchelfHook` for immediate use on NixOS.
+- **💻 Multi-Arch**: Supports `x86_64-linux`, `aarch64-linux`, `x86_64-darwin`, and `aarch64-darwin`.
 
-### Add to your `flake.nix`
+> **Note**: This package is named `antigravity-cli` to distinguish it from other tools. The main binary is available as `agy`.
+
+---
+
+## 📦 Installation
+
+### 1. Add to your Flake inputs
 
 ```nix
 {
@@ -33,28 +41,33 @@ A Nix flake for [Antigravity CLI](https://antigravity.google) (Google's Go-based
 }
 ```
 
-### Try without installing
+### 2. Quick Run (Try it now)
 
 ```bash
 nix run github:xsen/antigravity-cli-nix
 ```
 
-## Maintenance
+---
 
-### Updating hashes
+## 🛠 Maintenance & Automation
 
-To fetch the latest version from Google Storage and update `meta.json` with new hashes:
+The project is fully autonomous. A GitHub Action runs daily to:
+
+1. Query Google's storage manifests for new releases.
+2. Update `meta.json` with the latest version, build ID, and integrity hashes.
+3. Commit and push updates automatically.
+
+To manually trigger an update (requires Nix):
 
 ```bash
 nix run .#update
 ```
 
-This script:
-1. Queries the Google Storage JSON API for the latest version and build ID.
-2. Prefetches the archives for all supported platforms.
-3. Calculates SRI hashes matching Nix's `fetchzip` behavior.
-4. Updates `meta.json`.
+---
 
-## License
+## 📜 License
 
-This flake is licensed under the MIT License. The `antigravity-cli` binary itself is subject to Google's terms (unfree license).
+This flake is licensed under the **MIT License**.
+The `antigravity-cli` binary itself is proprietary software by Google and is subject to their terms (**unfree license**).
+
+---
