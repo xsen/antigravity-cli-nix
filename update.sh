@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# 1. Fetch the latest version and build ID from Google Storage JSON API
-echo "Fetching latest version from Google Storage..."
-XML_DATA=$(curl -s "https://storage.googleapis.com/storage/v1/b/antigravity-public/o?prefix=antigravity-cli/")
+# 1. Fetch the latest version and build ID from the official manifest
+echo "Fetching latest version from manifest..."
+MANIFEST_JSON=$(curl -fsSL "https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/linux_amd64.json")
+URL=$(echo "$MANIFEST_JSON" | jq -r '.url')
 
-# Extract the most recent version string (e.g., "1.0.3-6459114696605696")
-FULL_VERSION=$(echo "$XML_DATA" | jq -r '.items[].name' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+-[0-9]+' | sort -V | tail -n1)
+# Extract the version string (e.g., "1.0.11-6118976565149696")
+FULL_VERSION=$(echo "$URL" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+-[0-9]+')
 
 VERSION=$(echo "$FULL_VERSION" | cut -d'-' -f1)
 BUILD_ID=$(echo "$FULL_VERSION" | cut -d'-' -f2)
